@@ -409,7 +409,13 @@
 
         getCursorPosition: function() {
             return this.editor.getCursorPosition();
+        },
+        
+        insert : function(str){
+        	this.editor.insert(str);
         }
+        
+        
     });
 
     var FilePreview = Spine.Controller.create({
@@ -579,8 +585,210 @@
 
 
     }).init();
+    
+	
+	function EquationButtonData(filename, latexForm){
+		this.path = "../img/equation_editor/";
+		this.img_src = this.path + filename;
+		this.latexForm = latexForm;
+		this.className = "btn equation_button";
+		
+	}
+	
+	var SuperScriptsButtonData = [
+		new EquationButtonData("superscript1.gif", "x^{a}"),
+		new EquationButtonData("superscript2.gif", "x_{a}"),
+		new EquationButtonData("superscript3.gif", "x_{b}^{a}"),
+		new EquationButtonData("superscript4.gif", "{x_{a}}^{b}"),
+		new EquationButtonData("superscript5.gif", "_{a}^{b}\\textrm{C}")
+		
+		
+	
+	];
+	
+	var FractionButtonData = [
+		new EquationButtonData("fraction1.gif", "\\frac{a}{b}"),
+		new EquationButtonData("fraction2.gif", "x\\tfrac{a}{b}"),
+		new EquationButtonData("fraction3.gif", "\\frac{\\partial}{\\partial x}"),
+		new EquationButtonData("fraction4.gif", "\\frac{\\partial^2}{\\partial x^2}"),
+		new EquationButtonData("fraction5.gif", "\\frac{\\mathrm{d}}{\\mathrm{d} x}"),
+	
+	]
+	
+	var IntegralButtonData = [
+			new EquationButtonData("integral1.gif", "\\int"),
+			new EquationButtonData("integral2.gif", "\\int_{a}^{b}"),
+			new EquationButtonData("integral3.gif", "\\oint"),
+			new EquationButtonData("integral4.gif", "\\oint_{a}^{b}"),
+			new EquationButtonData("integral5.gif", "\\iint_{a}^{b}")
 
+		
+	];
+	
+	var CapButtonData = [
+		new EquationButtonData("cap1.gif", "\\bigcap"),
+		new EquationButtonData("cap2.gif", "\\bigcap_{a}^{b}"),
+		new EquationButtonData("cap3.gif", "\\bigcup"),
+		new EquationButtonData("cap4.gif", "\\bigcup_{a}^{b}"),
+		new EquationButtonData("cap5.gif", "\\lim_{n \\to \\infty }")
+	];
+	
+	var SumButtonData = [
+		new EquationButtonData("sum1.gif", "\\sum"),
+		new EquationButtonData("sum2.gif", "\\sum_{a}^{b}"),
+		new EquationButtonData("sum3.gif", "\\sqrt{x}"),
+		new EquationButtonData("sum4.gif", "\\sqrt[x]{y}"),
+		
+		
+	
+	];
+	
+	var BracketButtonData = [
+		new EquationButtonData("bracket1.gif", "\\left ( \\right )"),
+		new EquationButtonData("bracket2.gif", "\\left [ \\right ]"),
+		new EquationButtonData("bracket3.gif", "\\left { \\right }"),
+		new EquationButtonData("bracket4.gif", "\\left | a\\right |")
+		
+		
+	];
+	
+	var StyleButtonData = [
+		new EquationButtonData("style1.gif", "\\textup{Upright}"),
+		new EquationButtonData("style2.gif", "\\textbf{Bold}"),
+		new EquationButtonData("style3.gif", "\\textit{Italic}"),
+		new EquationButtonData("style4.gif", "\\textrm{Roman}"),
+		new EquationButtonData("style5.gif", "\\textsl{Slanted}"),
+		new EquationButtonData("style6.gif", "\\texttt{Typewriter}"),
+		new EquationButtonData("style7.gif", "\\textsc{small caps}"),
+		new EquationButtonData("style8.gif", "\\emph{Emphasis}")
 
+	
+	];
+	
+	StyleButtonData.forEach(function(buttonData){
+		buttonData.className = "btn   equation_button_wide equation_button";
+	});
+		
+	var EquationButtonDataCollection = [ 
+			SuperScriptsButtonData,
+			FractionButtonData,
+			IntegralButtonData,
+			CapButtonData,
+			SumButtonData,
+			BracketButtonData,
+			StyleButtonData
+			
+	];
+	
+		
+	var EquationEditorButtonGroup = Spine.Controller.sub({
+		
+		init : function(buttonGroupData){
+			this.buttonGroupData = buttonGroupData;
+		},
+		
+		className : "equation_button_group",
+		
+		events: {"mouseenter":"showButtons", "mouseleave": "hideButtons"},
+		
+		render : function(){
+			var topButtonData = this.buttonGroupData[0];
+			var topButton = EquationEditorButton.init(topButtonData);
+			this.append(topButton.render());
+			this.append( EquationEditorButtonGroupContent.init( this.buttonGroupData ).render());
+			return this;
+		},
+		
+		showButtons: function(event){
+			this.getGroupContent(event).show("slow");			
+		},
+		
+		hideButtons: function(event){
+			this.getGroupContent(event).hide("fast");
+		},
+		
+		getGroupContent: function(event){
+			var $eventSrc = $(event.target);
+			if($eventSrc.is(".equation_button_group")){
+				 return $eventSrc.find(".equation_button_group_content")
+			}
+			else{
+				 return $(".equation_button_group").has($eventSrc).find(".equation_button_group_content");
+			}
+		}
+	
+	});
+	
+	var EquationEditorButtonGroupContent = Spine.Controller.sub({
+	
+		init: function(buttonGroupData){
+			this.buttonGroupData = buttonGroupData;
+		},
+		
+		className : "equation_button_group_content",
+		
+		render : function(){
+		
+			for(var i = 1; i < this.buttonGroupData.length; i++){
+				var currentButtonData = this.buttonGroupData[i];
+				var currentButton = EquationEditorButton.init(currentButtonData);
+				this.append(currentButton.render());
+				
+			}
+			return this;
+		}
+	
+	});
+	
+	var EquationEditorButton = Spine.Controller.sub({
+		
+		init: function(equationButtonData){
+			this.img_src = equationButtonData.img_src;
+			this.alt_text = equationButtonData.latexForm;
+			this.className = equationButtonData.className;
+			
+		},
+		
+		tag: "button",
+		
+		events: {"click": "addEquationToTextArea"},
+		
+		addEquationToTextArea: function(event) {
+			var $srcImg;
+			if($(event.target).is("img")){
+				$srcImg = $(event.target);
+			}
+			else{
+				$srcImg = $("img", event.target);
+			}
+			
+			Dippa.Editor.insert($srcImg.attr("alt"));
+		}, 
+		
+		render : function(){
+			this.append(EquationEditorButton.template(this));
+			return this;
+        }
+		 
+		
+	},{
+	
+		template : Handlebars.compile($("#equationEditorButton-template").html())
+	});
+	
+	var EquationEditorContent = Spine.Controller.sub({
+		el : $('#equationEditorContent'),
+		init: function(){},
+		render : function(){
+			var eeContent = this;
+			EquationButtonDataCollection.forEach(function(buttonDataGroup){
+				var buttonGroup = EquationEditorButtonGroup.init(buttonDataGroup);
+				eeContent.append(buttonGroup.render());
+			});
+		}
+	}).init().render();
+	
+		
     var EditorView = Spine.Controller.sub({
         activate: function() {
             $('#editor').show();
@@ -691,5 +899,19 @@
     global.Files = Files;
     global.TabStack = TabStack;
     global.ControllerStack = ControllerStack;
+    
+    Handlebars.registerHelper("debug", function(optionalValue) {
+  console.log("Current Context");
+  console.log("====================");
+  console.log(this);
+ 
+  if (optionalValue) {
+    console.log("Value");
+    console.log("====================");
+    console.log(optionalValue);
+  }
+});
 
 })(Dippa);
+
+

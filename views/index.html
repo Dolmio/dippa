@@ -21,7 +21,7 @@
 	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-
+	
 	<script type="text/javascript">
 
 		var _gaq = _gaq || [];
@@ -35,6 +35,13 @@
 		})();
 
 	</script>
+	
+
+	
+	
+	
+
+	
 </head>
 
 <body>
@@ -212,7 +219,10 @@
 		</div>
 
 	</div>
+	
+	
 
+	
 	<div id="loader" style="position: relative; height: 50%; display: none">
 		<div style="position: absolute; bottom: 0px; height: 20px; left: 0px; right: 0px; text-align: center">
 			<img src="img/ajax-loader.gif" />
@@ -222,16 +232,26 @@
 </div> <!-- /container -->
 
 <div id="outer-container" style="position: absolute; top: 60px; bottom: 20px; width: 100%; display: none">
-	<div class="container-fluid" style="height: 100%">
-
-		<div class="row-fluid" style="height: 100%">
-			<div id="outline_container" class="span2" style="height: 100%; overflow-y: scroll;">
-				<ul id="outline_list" class="nav nav-list">
-					<li class="nav-header">
-						Document outline
-					</li>
-				</ul>
-			</div>
+		<div class="container-fluid" style="height: 100%">
+				<div class="row-fluid" style="height: 100%">
+						<div id="outline_container" class="span2" style="height: 100%; overflow-y: scroll;">
+							
+							
+						
+							<div class="nav"> 
+								<a id="equationEditorHeader" class="nav-header" data-toggle="collapse" href="#equationEditorContent"> Equation Editor <b class="caret"></b></a>
+								<div id="equationEditorContent" class="collapse">
+									
+									
+								</div>
+							
+							</div>
+							
+							<ul id="outline_list" class="nav nav-list">
+									<li class="nav-header"> Document outline </li>
+							</ul>
+				
+						</div>
 
 			<div id="editor_container" class="span10" style="height: 100%">
 				<div id="editor" style="width: 900px; height: 100%"></div>
@@ -291,6 +311,10 @@
 	<a class="section" style="margin-left: {{indent}}" href="#"><span class="section-title">{{title}}</span></a>
 </script>
 
+<script id="equationEditorButton-template" type="text/x-handlebars-template">
+	<img src="{{img_src}}" alt="{{alt_text}}"></img>
+</script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 <script src="scripts/underscore.js"></script>
@@ -308,6 +332,7 @@
 <script src="scripts/jquery.fileupload-ui.js"></script>
 <script src="scripts/handlebars-1.0.0.beta.6.js"></script>
 <script src="scripts/namespace.js"></script>
+<script src="scripts/bootstrap-collapse.js"></script>
 <script>
 	Dippa.basepath = window.location.hostname.indexOf('futupeople') !== -1 ? '/dippa/' : '/';
 </script>
@@ -421,6 +446,17 @@
 		Spine.Route.setup({history: true});
 	});
 
+</script>
+
+<!-- Script for Equation editor -->
+<script type="text/javascript">
+      
+	$(document).ready(function() {
+        $('.collapse').collapse({
+		    toggle: false
+		});
+		
+	});
 </script>
 
 </body>
