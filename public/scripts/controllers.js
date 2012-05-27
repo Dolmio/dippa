@@ -695,15 +695,32 @@
 			var topButtonData = this.buttonGroupData[0];
 			var topButton = EquationEditorButton.init(topButtonData);
 			this.append(topButton.render());
+			this.append(DummySpace.init());
 			this.append( EquationEditorButtonGroupContent.init( this.buttonGroupData ).render());
 			return this;
 		},
 		
 		showButtons: function(event){
-			this.getGroupContent(event).show("slow");			
+			var $content = this.getGroupContent(event);
+			var $currentGroup = $content.parent();
+			var dummyHeight = $currentGroup.children(".equation_button_group_content").actual("height");
+			var $lastGroupInTheRow = this.getLastGroupInTheSameRow($currentGroup);
+			if(! $currentGroup.is($lastGroupInTheRow) ){
+				var $dummySpaceInTheLastGroupInTheRow = $lastGroupInTheRow.children(".dummy_space");
+				// without the magic number lower buttons don't align necessarily to the same row next to each other as before the transition.
+				var magicMargin = 3;
+				$dummySpaceInTheLastGroupInTheRow.css("height", dummyHeight + magicMargin)
+				$dummySpaceInTheLastGroupInTheRow.show("slow");
+			}
+			
+			$content.show("slow");
+		
+			
+								
 		},
 		
 		hideButtons: function(event){
+			$(".dummy_space").hide("fast");
 			this.getGroupContent(event).hide("fast");
 		},
 		
@@ -715,6 +732,30 @@
 			else{
 				 return $(".equation_button_group").has($eventSrc).find(".equation_button_group_content");
 			}
+		},
+		
+		getLastGroupInTheSameRow: function($currentGroup){
+			var positionFromTop = $currentGroup.position().top;
+			var buttonGroupContainer = $currentGroup.parent();
+			var $lastGroupInTheSameRow;
+			
+			buttonGroupContainer.children(".equation_button_group").each(function(){
+				
+				var $loopedGroup = $(this);
+				if($loopedGroup.position().top <= positionFromTop){
+					$lastGroupInTheSameRow = $loopedGroup;
+				}
+				else{
+					return false;
+				}
+			
+			});
+			
+			if(!$lastGroupInTheSameRow){
+				$lastGroupInTheSameRow = $currentGroup;
+			}
+			
+			return $lastGroupInTheSameRow;
 		}
 	
 	});
@@ -728,15 +769,20 @@
 		className : "equation_button_group_content",
 		
 		render : function(){
-		
 			for(var i = 1; i < this.buttonGroupData.length; i++){
 				var currentButtonData = this.buttonGroupData[i];
 				var currentButton = EquationEditorButton.init(currentButtonData);
 				this.append(currentButton.render());
 				
 			}
+			
 			return this;
 		}
+	
+	});
+	
+	var DummySpace = Spine.Controller.sub({
+		className: "dummy_space"
 	
 	});
 	
@@ -900,18 +946,7 @@
     global.TabStack = TabStack;
     global.ControllerStack = ControllerStack;
     
-    Handlebars.registerHelper("debug", function(optionalValue) {
-  console.log("Current Context");
-  console.log("====================");
-  console.log(this);
- 
-  if (optionalValue) {
-    console.log("Value");
-    console.log("====================");
-    console.log(optionalValue);
-  }
-});
-
+    
 })(Dippa);
 
 
