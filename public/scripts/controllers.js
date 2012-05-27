@@ -665,6 +665,32 @@
 	
 	];
 	
+	var GreekLetterButtonData = [
+		new EquationButtonData("alpha.gif", "\\alpha"),
+		new EquationButtonData("beta.gif", "\\beta"),
+		new EquationButtonData("gamma.gif", "\\gamma"),
+		new EquationButtonData("delta.gif", "\\delta"),
+		new EquationButtonData("epsilon.gif", "\\epsilon"),
+		new EquationButtonData("theta.gif", "\\theta"),
+		new EquationButtonData("lambda.gif", "\\lambda"),
+		new EquationButtonData("pi.gif", "\\pi"),
+		new EquationButtonData("sigma.gif", "\\sigma"),
+		new EquationButtonData("phi.gif", "\\phi"),
+		
+	
+	];
+	
+	var SymbolButtonData = [
+		new EquationButtonData("symbol1.gif", "\\mathbb{P}"),
+		new EquationButtonData("symbol2.gif", "\\mathbb{N}"),
+		new EquationButtonData("symbol3.gif", "\\mathbb{Z}"),
+		new EquationButtonData("symbol4.gif", "\\mathbb{I}"),
+		new EquationButtonData("symbol5.gif", "\\mathbb{Q}"),
+		new EquationButtonData("symbol6.gif", "\\mathbb{R}"),
+		new EquationButtonData("symbol7.gif", "\\mathbb{C}"),
+	
+	];
+	
 	StyleButtonData.forEach(function(buttonData){
 		buttonData.className = "btn   equation_button_wide equation_button";
 	});
@@ -676,7 +702,9 @@
 			CapButtonData,
 			SumButtonData,
 			BracketButtonData,
-			StyleButtonData
+			StyleButtonData,
+			GreekLetterButtonData,
+			SymbolButtonData
 			
 	];
 	
